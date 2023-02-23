@@ -12,23 +12,9 @@ from xhtml2pdf import pisa  # type: ignore
 from django.http import HttpResponse
 from user.utils import link_callback
 from typing import Callable, Any
+from utils.models import derive_save_model_serializer
 
 # Create your views here.
-
-
-def derive_save_model_serializer(serializer_class: Any):
-    def _decorator(func: Callable):
-        def wrapper(req: Request):
-            serializer = serializer_class(data=req.data)
-            if not serializer.is_valid():
-                return Response(serializer.errors, status=400)
-            serializer.save()
-
-            return Response(status=200)
-
-        return wrapper
-
-    return _decorator
 
 
 @swagger_auto_schema(methods=["post"], request_body=s.AdminSerializer)
