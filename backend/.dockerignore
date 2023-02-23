@@ -1,0 +1,13 @@
+venv/
+.env
+__pycache__
+
+*.sqlite3
+staticfiles/
+
+# FUSE FS file
+.fuse_hidden*
+# backup files i make for testing purposes
+*.bak
+# my env setup script
+setup.sh
