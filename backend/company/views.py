@@ -5,9 +5,9 @@ from rest_framework.response import Response
 from rest_framework.request import Request
 from company import models as m
 from company import serializers as s
-from rest_framework import permissions as p
-from user.models import User
-from typing import cast
+from rest_framework import permissions as rest_p
+from company import permissions as model_p
+from utils.models import derive_save_model_serializer
 
 # Create your views here.
 
@@ -22,23 +22,14 @@ def get_companies(req: Request):
 
 @swagger_auto_schema(methods=["post"], request_body=s.CompanySerializer)
 @api_view(["POST"])
+@permission_classes([rest_p.IsAuthenticated, model_p.CanAddCompany])
+@derive_save_model_serializer(s.CompanySerializer)
 def add_company(req: Request):
-    if not cast(User, req.user).has_perm("company.add_company"):
-        return Response("You dont have the permission to add a company", status=403)
-
-    serializer = s.CompanySerializer(data=req.data)
-    if not serializer.is_valid():
-        return Response(serializer.errors, status=400)
-    serializer.save()
-
-    return Response(status=200)
+    pass
 
 
 @api_view(["POST"])
-@permission_classes([p.IsAuthenticated])
+@permission_classes([rest_p.IsAuthenticated, model_p.CanDeleteCompany])
 def remove_company(req: Request, id: int):
-    if not cast(User, req.user).has_perm("company.delete_company"):
-        return Response("You dont have the permission to delete a company!", status=403)
-
     m.Company.objects.get(id=id).delete()
     return Response(status=200)
