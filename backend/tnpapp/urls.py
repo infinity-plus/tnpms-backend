@@ -20,5 +20,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/', include('user.urls')),
     path('company/', include('company.urls')),
-    path('swagger/', include('swagger.urls'))    
+    path('openapi/', include('openapi.urls'))    
 ]
