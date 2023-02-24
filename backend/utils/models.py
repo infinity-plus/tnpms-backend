@@ -1,6 +1,7 @@
 from typing import Callable, Any
 from rest_framework.request import Request
 from rest_framework.response import Response
+from django.db import models
 
 
 def derive_save_model_serializer(serializer_class: Any):
@@ -22,3 +23,17 @@ def derive_save_model_serializer(serializer_class: Any):
         return wrapper
 
     return _decorator
+
+
+class ApprovedManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(is_approved=True)
+
+
+class Approvable(models.Model):
+    objects = models.Manager()
+    is_approved = models.BooleanField(default=False)
+    approved_objects = ApprovedManager()
+
+    class Meta:
+        abstract = True

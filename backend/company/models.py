@@ -2,10 +2,12 @@ from django.db import models
 from company.roles import CompanyType, Gender
 from user.validators import number_validator
 from functools import partial
+from utils.models import Approvable
+
 # Create your models here.
 
 
-class Company(models.Model):
+class Company(Approvable):
     name = models.CharField(max_length=256)
     email_id = models.EmailField()
     phone_number = models.CharField(max_length=10, validators=[
@@ -27,7 +29,7 @@ class Company(models.Model):
         verbose_name_plural = "Companies"
 
 
-class CurrentOpening(models.Model):
+class CurrentOpening(Approvable):
     job_title = models.CharField(max_length=256)
     opening_year = models.CharField(max_length=256)
     # supposed to be numeric 15? what exactly is nature, in a 15 digit number?

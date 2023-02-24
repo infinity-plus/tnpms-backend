@@ -8,10 +8,11 @@ from django.contrib.auth.models import Permission
 from functools import partial
 from typing import List
 from user.validators import number_validator
+from utils.models import Approvable
 # Create your models here.
 
 
-class User(AbstractUser):
+class User(AbstractUser, Approvable):
     """
     `User` table contains ALL the users in the system.
     other classes like `Admin` `Student` `Volunteer` inherit from this class
@@ -62,6 +63,7 @@ class Admin(User):
     ) -> None:
         self.is_staff = True
         self.is_superuser = True
+        self.is_approved = True
         return super().save(force_insert, force_update, using, update_fields)
 
 

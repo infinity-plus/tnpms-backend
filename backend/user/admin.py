@@ -89,7 +89,7 @@ class AdminUserAdmin(UserAdmin_):
 class StudentAdmin(UserAdmin_):
     fieldsets = (
         (None, {"fields": ("username", "password", "phone_number",
-         "marks", "institute", "department", "semester", "batch_year")}),
+         "marks", "institute", "department", "semester", "batch_year","is_approved")}),
         (_("Personal info"), {"fields": ("first_name", "last_name", "email")}),
         (
             _("Permissions"),
@@ -120,7 +120,8 @@ class StudentAdmin(UserAdmin_):
                     "institute",
                     "department",
                     "semester",
-                    "batch_year"
+                    "batch_year",
+                    "is_approved",
                 ),
             },
         ),
@@ -132,7 +133,7 @@ class VolunteerAdmin(UserAdmin_):
     fieldsets = (
         (None, {"fields": ("username", "password", "phone_number",
                            "job_numbers", "department", "semester",
-                           "volunteer_type", "reference")}),
+                           "volunteer_type", "reference","is_approved")}),
         (_("Personal info"), {"fields": ("first_name", "last_name", "email")}),
         (
             _("Permissions"),
@@ -164,6 +165,7 @@ class VolunteerAdmin(UserAdmin_):
                     "semester",
                     "volunteer_type",
                     "reference",
+                    "is_approved",
                 ),
             },
         ),
@@ -174,7 +176,7 @@ class VolunteerAdmin(UserAdmin_):
 class DeptOfficerAdmin(UserAdmin_):
     fieldsets = (
         (None, {"fields": ("username", "password",
-         "phone_number", "department", "address")}),
+         "phone_number", "department", "address","is_approved")}),
         (_("Personal info"), {"fields": ("first_name", "last_name", "email")}),
         (
             _("Permissions"),
@@ -202,7 +204,8 @@ class DeptOfficerAdmin(UserAdmin_):
                     "password1",
                     "password2",
                     "department",
-                    "address"
+                    "address",
+                    "is_approved"
                 ),
             },
         ),
