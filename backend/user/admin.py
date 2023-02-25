@@ -1,3 +1,4 @@
+from functools import cached_property
 from django.contrib import admin
 from user import models as m
 from django.contrib.auth.admin import UserAdmin as UserAdmin_
@@ -47,6 +48,10 @@ from django.utils.translation import gettext_lazy as _
 
 @admin.register(m.Admin)
 class AdminUserAdmin(UserAdmin_):
+    @cached_property
+    def list_filter(self):
+        return (*super().list_filter, "is_approved",)
+
     fieldsets = (
         (
             None,
@@ -87,6 +92,11 @@ class AdminUserAdmin(UserAdmin_):
 
 @admin.register(m.Student)
 class StudentAdmin(UserAdmin_):
+    @cached_property
+    def list_filter(self):
+        return (*super().list_filter, "is_approved",)
+
+   
     fieldsets = (
         (None, {"fields": ("username", "password", "phone_number",
          "marks", "institute", "department", "semester", "batch_year","is_approved")}),
@@ -130,6 +140,10 @@ class StudentAdmin(UserAdmin_):
 
 @admin.register(m.Volunteer)
 class VolunteerAdmin(UserAdmin_):
+    @cached_property
+    def list_filter(self):
+        return (*super().list_filter, "is_approved",)
+
     fieldsets = (
         (None, {"fields": ("username", "password", "phone_number",
                            "job_numbers", "department", "semester",
@@ -174,6 +188,10 @@ class VolunteerAdmin(UserAdmin_):
 
 @admin.register(m.DeptOfficer)
 class DeptOfficerAdmin(UserAdmin_):
+    @cached_property
+    def list_filter(self):
+        return (*super().list_filter, "is_approved",)
+
     fieldsets = (
         (None, {"fields": ("username", "password",
          "phone_number", "department", "address","is_approved")}),
