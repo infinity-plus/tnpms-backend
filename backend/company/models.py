@@ -24,6 +24,9 @@ class Company(Approvable):
     # possible to move to enum probably
     company_type = models.CharField(max_length=256)
 
+    def __str__(self) -> str:
+        return self.name
+
     class Meta:
         verbose_name = "Company"
         verbose_name_plural = "Companies"
@@ -48,3 +51,6 @@ class CurrentOpening(Approvable):
     # supposed to be boolean, what about `ANY` type? nullable boolean?
     gender_preference = models.PositiveSmallIntegerField(
         choices=Gender.choices)
+
+    def __str__(self) -> str:
+        return self.job_title
