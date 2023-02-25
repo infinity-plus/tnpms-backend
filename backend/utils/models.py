@@ -1,4 +1,4 @@
-from typing import Callable, Any
+from typing import Callable, Any, Type
 from rest_framework.request import Request
 from rest_framework.response import Response
 from django.db import models
@@ -37,3 +37,22 @@ class Approvable(models.Model):
 
     class Meta:
         abstract = True
+
+
+def show_approved_objects(model_class:Type[Approvable], serializer_class: Any):
+    """
+    This decorator is destructive, it re-assgines the function body itself
+    and whatever which was previously defined in the ORIGINAL function
+    will not remain and will not be executed.
+    """
+    def _decorator(func: Callable):
+        def wrapper(req: Request):
+            data = func(model_class.approved_objects.all())
+            serializer = serializer_class(data, many=True)
+            return Response(serializer.data, status=200)
+
+        return wrapper
+
+    return _decorator
+
+
