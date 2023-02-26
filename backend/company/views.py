@@ -24,8 +24,8 @@ def get_companies(data: QuerySet):
 @api_view(["POST"])
 @permission_classes([rest_p.IsAuthenticated, DRFPermission("company.add_company")])
 @derive_save_model_serializer(s.CompanySerializer)
-def add_company(req: Request):
-    pass
+def add_company():
+    return
 
 
 @api_view(["POST"])
@@ -33,3 +33,22 @@ def add_company(req: Request):
 def remove_company(req: Request, id: int):
     m.Company.objects.get(id=id).delete()
     return Response(status=200)
+
+
+@swagger_auto_schema(
+    method="get", responses={200: s.CurrentOpeningSerializer(many=True)}
+)
+@api_view(["GET"])
+@show_approved_objects(m.CurrentOpening, s.CurrentOpeningSerializer)
+def get_current_openings(data: QuerySet):
+    return data
+
+
+@swagger_auto_schema(methods=["post"], request_body=s.CurrentOpeningSerializer)
+@api_view(["POST"])
+@permission_classes(
+    [rest_p.IsAuthenticated, DRFPermission("opening.add_current_opening")]
+)
+@derive_save_model_serializer(s.CurrentOpeningSerializer)
+def add_current_opening():
+    return

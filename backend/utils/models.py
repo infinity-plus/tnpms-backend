@@ -39,6 +39,9 @@ class Approvable(models.Model):
         abstract = True
 
 
+def model_field_exist(model: Any, field: str) -> bool:
+    return field in [i.name for i in model._meta.get_fields(include_hidden=True)]
+
 def show_approved_objects(model_class:Type[Approvable], serializer_class: Any):
     """
     This decorator is destructive, it re-assgines the function body itself
@@ -47,7 +50,13 @@ def show_approved_objects(model_class:Type[Approvable], serializer_class: Any):
     """
     def _decorator(func: Callable):
         def wrapper(req: Request):
-            data = func(model_class.approved_objects.all())
+            _sort = req.GET.dict().get('sort')
+            data = model_class.approved_objects.all()
+            if _sort is not None and model_field_exist(model_class, _sort.replace('-','')):
+                data = data.order_by(_sort)
+            
+            data = func(data)
+
             serializer = serializer_class(data, many=True)
             return Response(serializer.data, status=200)
 
