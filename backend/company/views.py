@@ -7,8 +7,8 @@ from rest_framework.request import Request
 from company import models as m
 from company import serializers as s
 from rest_framework import permissions as rest_p
-from company import permissions as model_p
 from utils.models import derive_save_model_serializer, show_approved_objects
+from utils.permissions import DRFPermission
 
 # Create your views here.
 
@@ -22,14 +22,14 @@ def get_companies(data: QuerySet):
 
 @swagger_auto_schema(methods=["post"], request_body=s.CompanySerializer)
 @api_view(["POST"])
-@permission_classes([rest_p.IsAuthenticated, model_p.CanAddCompany])
+@permission_classes([rest_p.IsAuthenticated, DRFPermission("company.add_company")])
 @derive_save_model_serializer(s.CompanySerializer)
 def add_company(req: Request):
     pass
 
 
 @api_view(["POST"])
-@permission_classes([rest_p.IsAuthenticated, model_p.CanDeleteCompany])
+@permission_classes([rest_p.IsAuthenticated, DRFPermission("company.remove_company")])
 def remove_company(req: Request, id: int):
     m.Company.objects.get(id=id).delete()
     return Response(status=200)
