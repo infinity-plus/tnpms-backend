@@ -13,6 +13,7 @@ from django.http import HttpResponse
 from user.utils import link_callback
 from typing import Callable, Any
 from utils.models import derive_save_model_serializer
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 
@@ -46,6 +47,7 @@ def insert_user_deptofficer(req: Request):
 
 
 @swagger_auto_schema(methods=["post"], request_body=s.UserLoginSerializer)
+@csrf_exempt
 @api_view(["POST"])
 def login_user(req: Request):
     srlzr = s.UserLoginSerializer(data=req.data)
