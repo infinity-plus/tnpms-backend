@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from user import models as m
-from utils.serializer import BaseUserModelSerializer
+from tnpapp.serializers import BaseUserModelSerializer
 
 
 class StudentSerializer(BaseUserModelSerializer):

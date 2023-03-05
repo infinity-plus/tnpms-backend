@@ -2,7 +2,7 @@ from django.db import models
 from company.roles import CompanyType, Gender
 from user.validators import number_validator
 from functools import partial
-from utils.models import Approvable
+from tnpapp.models import Approvable
 
 # Create your models here.
 

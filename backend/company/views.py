@@ -1,6 +1,6 @@
 from company import models as m
 from company import serializers as s
-from utils.models import BaseCrudModelViewSet
+from tnpapp.models import BaseCrudModelViewSet
 # Create your views here.
 
 

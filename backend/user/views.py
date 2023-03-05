@@ -11,7 +11,7 @@ from django.template import Context, Template
 from xhtml2pdf import pisa  # type: ignore
 from django.http import HttpResponse
 from user.utils import link_callback
-from utils.models import BaseCrudModelViewSet
+from tnpapp.models import BaseCrudModelViewSet
 from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.

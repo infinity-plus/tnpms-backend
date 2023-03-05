@@ -5,7 +5,7 @@ from django.contrib.auth.models import Permission
 from functools import partial
 from typing import List
 from user.validators import number_validator
-from utils.models import Approvable
+from tnpapp.models import Approvable
 
 # Create your models here.
 
