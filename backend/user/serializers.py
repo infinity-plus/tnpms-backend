@@ -1,28 +1,21 @@
 from rest_framework import serializers
-from typing import Any
-from functools import wraps
 from user import models as m
-from utils.serializer import DeriveBaseUserSerializer
+from utils.serializer import BaseUserModelSerializer
 
 
-@DeriveBaseUserSerializer(m.Admin)
-class AdminSerializer(serializers.ModelSerializer):
-    pass
+class StudentSerializer(BaseUserModelSerializer):
+    class Meta(BaseUserModelSerializer.Meta):
+        model = m.Student
 
 
-@DeriveBaseUserSerializer(m.Student)
-class StudentSerializer(serializers.ModelSerializer):
-    pass
+class DeptOfficerSerializer(BaseUserModelSerializer):
+    class Meta(BaseUserModelSerializer.Meta):
+        model = m.DeptOfficer
 
 
-@DeriveBaseUserSerializer(m.DeptOfficer)
-class DeptOfficerSerializer(serializers.ModelSerializer):
-    pass
-
-
-@DeriveBaseUserSerializer(m.Volunteer)
-class VolunteerSerializer(serializers.ModelSerializer):
-    pass
+class VolunteerSerializer(BaseUserModelSerializer):
+    class Meta(BaseUserModelSerializer.Meta):
+        model = m.Volunteer
 
 
 class UserLoginSerializer(serializers.Serializer):

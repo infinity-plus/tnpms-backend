@@ -1,28 +1,37 @@
-from functools import wraps
+from rest_framework import serializers
 from typing import Any
 
 
-def DeriveBaseUserSerializer(klass: Any):
-    def decorator(cls: Any):
-        @wraps(klass, updated=())
-        class Temp(cls):
-            class Meta:
-                model = klass
-                exclude = (
-                    "is_staff",
-                    "is_superuser",
-                    "is_active",
-                    "role",
-                    "user_permissions",
-                    "groups",
-                    "last_login",
-                    "date_joined",
-                )
-                extra_kwargs = {"password": {"write_only": True}}
+class BaseUserModelSerializer(serializers.ModelSerializer):
+    password1 = serializers.CharField(
+        write_only=True,
+        required=True,
+        style={"input_type": "password", "placeholder": "Password"},
+    )
+    password2 = serializers.CharField(
+        write_only=True,
+        required=True,
+        style={"input_type": "password", "placeholder": "Confirm Password"},
+    )
 
-            def save(self, **kwargs):
-                return self.Meta.model.objects.create_user(**self.validated_data)
+    class Meta:
+        model: Any
+        exclude = (
+            "is_staff",
+            "is_superuser",
+            "is_active",
+            "user_permissions",
+            "groups",
+            "password",
+            "last_login",
+            "date_joined",
+        )
 
-        return Temp
+    def validate(self, attrs: Any) -> Any:
+        attrs["password"] = attrs["password1"]
+        if attrs.pop("password1") != attrs.pop("password2"):
+            raise serializers.ValidationError({"password": "passwords do not match"})
+        return attrs
 
-    return decorator
+    def save(self):
+        return self.Meta.model.objects.create_user(**self.validated_data)
