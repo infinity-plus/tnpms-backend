@@ -1,8 +1,8 @@
 from typing import Any
-from rest_framework.permissions import DjangoModelPermissions
 from django.db import models
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import get_object_or_404
+from tnpapp.permissions import FineGrainedPermisions
 
 
 class ApprovedManager(models.Manager):
@@ -24,7 +24,7 @@ class BaseCrudModelViewSet(ModelViewSet):
     # detialed serializer for one entity view
     serializer_class: Any
     model_class: Any
-    permission_classes = [DjangoModelPermissions]
+    permission_classes = [FineGrainedPermisions]
     
     # for filtering
     # https://www.django-rest-framework.org/api-guide/filtering/#djangofilterbackend
