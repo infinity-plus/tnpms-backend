@@ -11,38 +11,19 @@ from django.template import Context, Template
 from xhtml2pdf import pisa  # type: ignore
 from django.http import HttpResponse
 from user.utils import link_callback
-from typing import Callable, Any
-from utils.models import derive_save_model_serializer
+from utils.models import BaseCrudModelViewSet
 from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 
-# @swagger_auto_schema(methods=["post"], request_body=s.AdminSerializer)
-# @api_view(["POST"])
-# @derive_save_model_serializer(s.AdminSerializer)
-# def insert_user_admin(req: Request):
-#     pass
+class StudentCrudView(BaseCrudModelViewSet):
+    serializer_class = s.StudentSerializer
+    model_class = m.Student
 
 
-@swagger_auto_schema(methods=["post"], request_body=s.StudentSerializer)
-@api_view(["POST"])
-@derive_save_model_serializer(s.StudentSerializer)
-def insert_user_student(req: Request):
-    pass
-
-
-@swagger_auto_schema(methods=["post"], request_body=s.VolunteerSerializer)
-@api_view(["POST"])
-@derive_save_model_serializer(s.VolunteerSerializer)
-def insert_user_volunteer(req: Request):
-    pass
-
-
-@swagger_auto_schema(methods=["post"], request_body=s.DeptOfficerSerializer)
-@api_view(["POST"])
-@derive_save_model_serializer(s.DeptOfficerSerializer)
-def insert_user_deptofficer(req: Request):
-    pass
+class VolunteerCrudView(BaseCrudModelViewSet):
+    serializer_class = s.VolunteerSerializer
+    model_class = m.Volunteer
 
 
 @swagger_auto_schema(methods=["post"], request_body=s.UserLoginSerializer)

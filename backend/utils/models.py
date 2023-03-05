@@ -1,8 +1,10 @@
 from typing import Callable, Any, Type
+from rest_framework.permissions import DjangoModelPermissions
 from rest_framework.request import Request
 from rest_framework.response import Response
 from django.db import models
-
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.generics import get_object_or_404
 
 def derive_save_model_serializer(serializer_class: Any):
     """
@@ -64,4 +66,23 @@ def show_approved_objects(model_class:Type[Approvable], serializer_class: Any):
 
     return _decorator
 
+class BaseCrudModelViewSet(ModelViewSet):
+    # TODO : smaller serializer for all listing view and
+    # detialed serializer for one entity view
+    serializer_class: Any
+    model_class: Any
+    permission_classes = [DjangoModelPermissions]
+    
+    # for filtering
+    # https://www.django-rest-framework.org/api-guide/filtering/#djangofilterbackend
 
+    def get_object(self):
+        return get_object_or_404(self.model_class, id=self.kwargs["pk"])
+
+    def get_queryset(self):
+        """
+        add is_approved here or is_active filter here
+        filtering code below for reference, DO NOT USE IN PRODUCTION
+        return self.model_class.objects.filter(**self.request.GET.dict())
+        """
+        return self.model_class.objects.all()
