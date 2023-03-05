@@ -17,12 +17,11 @@ from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 
-
-@swagger_auto_schema(methods=["post"], request_body=s.AdminSerializer)
-@api_view(["POST"])
-@derive_save_model_serializer(s.AdminSerializer)
-def insert_user_admin(req: Request):
-    pass
+# @swagger_auto_schema(methods=["post"], request_body=s.AdminSerializer)
+# @api_view(["POST"])
+# @derive_save_model_serializer(s.AdminSerializer)
+# def insert_user_admin(req: Request):
+#     pass
 
 
 @swagger_auto_schema(methods=["post"], request_body=s.StudentSerializer)
