@@ -51,7 +51,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_yasg',
     'user',
-    'company'
+    'company',
+    'placement'
 ]
 
 CORS_ORIGIN_ALLOW_ALL = False
