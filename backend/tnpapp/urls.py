@@ -15,10 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from company.urls import router as company_router
 
+# you can also declare urlpatterns in the respected modules and use include('appname.urls')
+# here, everything is right at one place
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/', include('user.urls')),
-    path('', include('company.urls')),
+    path('job/', include(company_router.urls)),
     path('openapi/', include('openapi.urls')),
 ]
