@@ -34,7 +34,7 @@ def login_user(req: Request):
     if not srlzr.is_valid():
         return Response(srlzr.errors, status=400)
 
-    user = m.User.objects.filter(username=srlzr.validated_data["username"]).first()
+    user = m.CustomUser.objects.filter(username=srlzr.validated_data["username"]).first()
     if user is None:
         return Response("User Not Found in System", status=404)
 

@@ -1,29 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, UserManager
 from user.roles import VolunteerType
-from django.contrib.auth.models import Permission
-from functools import partial
-from typing import List
-from user.validators import number_validator
-from tnpapp.models import Approvable
-
-# Create your models here.
-
-
-class User(AbstractUser, Approvable):
-    _predefined_permissions: List[str] = []
-
-    phone_number = models.CharField(
-        max_length=10, validators=[partial(number_validator, length=10)]
-    )
-
-    def save(self, *args, **kwargs) -> None:
-        saved_user = super().save(*args, **kwargs)
-        # assigning permissions AFTER the user is added in the database
-        self.user_permissions.add(
-            *[Permission.objects.get(codename=i) for i in self._predefined_permissions]
-        )
-        return saved_user
+from tnpapp.models import CustomUser
 
 
 # ALL USER MODELS
@@ -32,7 +10,7 @@ class AdminUserManager(UserManager):
         return super().get_queryset().filter(is_superuser=True)
 
 
-class Admin(User):
+class Admin(CustomUser):
     objects = AdminUserManager()
 
     class Meta:
@@ -52,7 +30,7 @@ class Admin(User):
         return super().save(*args, **kwargs)
 
 
-class Student(User):
+class Student(CustomUser):
     marks = models.IntegerField()
     institute = models.CharField(max_length=256)
     department = models.CharField(max_length=256)
@@ -66,7 +44,7 @@ class Student(User):
         verbose_name_plural = "Students"
 
 
-class Volunteer(User):
+class Volunteer(CustomUser):
     job_numbers = models.PositiveSmallIntegerField()
     department = models.CharField(max_length=256)
     semester = models.CharField(max_length=1, blank=False)
@@ -80,7 +58,7 @@ class Volunteer(User):
         verbose_name_plural = "Volunteers"
 
 
-class DeptOfficer(User):
+class DeptOfficer(CustomUser):
     department = models.CharField(max_length=256)
     address = models.TextField(max_length=2000)
 

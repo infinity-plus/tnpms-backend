@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'tnpapp',
     'corsheaders', # cors headers
 
     'rest_framework',
@@ -151,7 +152,7 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # use the custom user model
-AUTH_USER_MODEL = 'user.User'
+AUTH_USER_MODEL = 'tnpapp.CustomUser'
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
