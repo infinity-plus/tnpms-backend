@@ -38,3 +38,8 @@ class BaseUserModelSerializer(serializers.ModelSerializer):
 
     def save(self):
         return self.Meta.model.objects.create_user(**self.validated_data)
+
+
+class CustomUserSerializer(BaseUserModelSerializer):
+    class Meta(BaseUserModelSerializer.Meta):
+        model = CustomUser

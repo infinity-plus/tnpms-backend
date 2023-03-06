@@ -5,6 +5,7 @@ from django.contrib.auth import login, logout
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.request import Request
 from rest_framework.response import Response
+from tnpapp.serializers import CustomUserSerializer
 from user import serializers as s
 from user import models as m
 from django.template import Context, Template
@@ -55,7 +56,8 @@ def logout_user(req: Request):
 @api_view(["GET"])
 @permission_classes([p.IsAuthenticated])
 def get_user(req: Request):
-    return Response(req.user.get_username())
+    serializer = CustomUserSerializer(req.user)
+    return Response(serializer.data)
 
 
 @api_view(["GET"])
