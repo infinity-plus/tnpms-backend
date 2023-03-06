@@ -6,12 +6,12 @@ from django.urls import re_path
 
 schema_view = get_schema_view(
    openapi.Info(
-      title="Snippets API",
-      default_version='v1',
-      description="Test description",
-      terms_of_service="https://www.google.com/policies/terms/",
-      contact=openapi.Contact(email="contact@snippets.local"),
-      license=openapi.License(name="BSD License"),
+      title="Training and Placement API",
+      default_version='v-alpha',
+      description="API routes for using the system",
+      # terms_of_service="https://www.google.com/policies/terms/",
+      # contact=openapi.Contact(email="contact@snippets.local"),
+      # license=openapi.License(name="BSD License"),
    ),
    public=True,
    permission_classes=[permissions.AllowAny],
