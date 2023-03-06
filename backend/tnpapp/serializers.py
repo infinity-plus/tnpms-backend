@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from typing import Any
+from tnpapp.models import CustomUser
 
 
 class BaseUserModelSerializer(serializers.ModelSerializer):
@@ -17,12 +18,14 @@ class BaseUserModelSerializer(serializers.ModelSerializer):
     class Meta:
         model: Any
         exclude = (
-            "is_staff",
-            "is_superuser",
-            "is_active",
             "user_permissions",
             "groups",
             "password",
+        )
+        read_only_fields = (
+            "is_active",
+            "is_staff",
+            "is_superuser",
             "last_login",
             "date_joined",
         )
