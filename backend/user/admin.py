@@ -1,213 +1,75 @@
 from django.contrib import admin
+from django.utils.functional import cached_property
 from user import models as m
 from django.contrib.auth.admin import UserAdmin as UserAdmin_
 from django.utils.translation import gettext_lazy as _
-
-# Register your models here.
-# @admin.register(m.User)
-# class UserAdmin(UserAdmin_):
-#     fieldsets = (
-#         (
-#             None,
-#             {
-#                 "fields": (
-#                     "username",
-#                     "password",
-#                     "phone_number",
-#                     "role",
-#                 )
-#             },
-#         ),
-#         (_("Personal info"), {"fields": ("first_name", "last_name", "email")}),
-#         (
-#             _("Permissions"),
-#             {
-#                 "fields": (
-#                     "is_active",
-#                     "is_staff",
-#                     "is_superuser",
-#                     "groups",
-#                     "user_permissions",
-#                 )
-#             },
-#         ),
-#         (_("Important dates"), {"fields": ("last_login", "date_joined")}),
-#     )
-
-#     add_fieldsets = (
-#         (
-#             None,
-#             {
-#                 "classes": ("wide",),
-#                 "fields": ("username", "phone_number", "password1", "password2"),
-#             },
-#         ),
-#     )
+from tnpapp.admin import append_primary_fields
 
 
+# TODO : fix types
 @admin.register(m.Admin)
 class AdminUserAdmin(UserAdmin_):
+    @cached_property
+    def fieldsets(self):
+        return super().fieldsets
 
-    fieldsets = (
-        (
-            None,
-            {
-                "fields": (
-                    "username",
-                    "password",
-                    "phone_number",
-                )
-            },
-        ),
-        (_("Personal info"), {"fields": ("first_name", "last_name", "email")}),
-        (
-            _("Permissions"),
-            {
-                "fields": (
-                    "is_active",
-                    "is_staff",
-                    "is_superuser",
-                    "groups",
-                    "user_permissions",
-                )
-            },
-        ),
-        (_("Important dates"), {"fields": ("last_login", "date_joined")}),
-    )
-
-    add_fieldsets = (
-        (
-            None,
-            {
-                "classes": ("wide",),
-                "fields": ("username", "phone_number", "password1", "password2"),
-            },
-        ),
-    )
+    @cached_property
+    def add_fieldsets(self):
+        return super().fieldsets
 
 
 @admin.register(m.Student)
 class StudentAdmin(UserAdmin_):
-   
-    fieldsets = (
-        (None, {"fields": ("username", "password", "phone_number",
-         "marks", "institute", "department", "semester", "batch_year",)}),
-        (_("Personal info"), {"fields": ("first_name", "last_name", "email")}),
-        (
-            _("Permissions"),
-            {
-                "fields": (
-                    "is_active",
-                    "is_staff",
-                    "is_superuser",
-                    "groups",
-                    "user_permissions",
-                )
-            },
-        ),
-        (_("Important dates"), {"fields": ("last_login", "date_joined")}),
+    new_fields = (
+        "phone_number",
+        "marks",
+        "institute",
+        "department",
+        "semester",
+        "batch_year",
     )
 
-    add_fieldsets = (
-        (
-            None,
-            {
-                "classes": ("wide",),
-                "fields": (
-                    "username",
-                    "phone_number",
-                    "password1",
-                    "password2",
-                    "marks",
-                    "institute",
-                    "department",
-                    "semester",
-                    "batch_year",
-                ),
-            },
-        ),
-    )
+    @cached_property
+    def fieldsets(self):
+        return append_primary_fields(super().fieldsets, self.new_fields)
+
+    @cached_property
+    def add_fieldsets(self):
+        return append_primary_fields(super().add_fieldsets, self.new_fields)
 
 
 @admin.register(m.Volunteer)
 class VolunteerAdmin(UserAdmin_):
-
-    fieldsets = (
-        (None, {"fields": ("username", "password", "phone_number",
-                           "job_numbers", "department", "semester",
-                           "volunteer_type", "reference",)}),
-        (_("Personal info"), {"fields": ("first_name", "last_name", "email")}),
-        (
-            _("Permissions"),
-            {
-                "fields": (
-                    "is_active",
-                    "is_staff",
-                    "is_superuser",
-                    "groups",
-                    "user_permissions",
-                )
-            },
-        ),
-        (_("Important dates"), {"fields": ("last_login", "date_joined")}),
+    new_fields = (
+        "phone_number",
+        "job_numbers",
+        "department",
+        "semester",
+        "volunteer_type",
+        "reference",
     )
 
-    add_fieldsets = (
-        (
-            None,
-            {
-                "classes": ("wide",),
-                "fields": (
-                    "username",
-                    "phone_number",
-                    "password1",
-                    "password2",
-                    "job_numbers",
-                    "department",
-                    "semester",
-                    "volunteer_type",
-                    "reference",
-                ),
-            },
-        ),
-    )
+    @cached_property
+    def fieldsets(self):
+        return append_primary_fields(super().fieldsets, self.new_fields)
+
+    @cached_property
+    def add_fieldsets(self):
+        return append_primary_fields(super().add_fieldsets, self.new_fields)
 
 
 @admin.register(m.DeptOfficer)
 class DeptOfficerAdmin(UserAdmin_):
-
-    fieldsets = (
-        (None, {"fields": ("username", "password",
-         "phone_number", "department", "address",)}),
-        (_("Personal info"), {"fields": ("first_name", "last_name", "email")}),
-        (
-            _("Permissions"),
-            {
-                "fields": (
-                    "is_active",
-                    "is_staff",
-                    "is_superuser",
-                    "groups",
-                    "user_permissions",
-                )
-            },
-        ),
-        (_("Important dates"), {"fields": ("last_login", "date_joined")}),
+    new_fields = (
+        "phone_number",
+        "department",
+        "address",
     )
 
-    add_fieldsets = (
-        (
-            None,
-            {
-                "classes": ("wide",),
-                "fields": (
-                    "username",
-                    "phone_number",
-                    "password1",
-                    "password2",
-                    "department",
-                    "address",
-                ),
-            },
-        ),
-    )
+    @cached_property
+    def fieldsets(self):
+        return append_primary_fields(super().fieldsets, self.new_fields)
+
+    @cached_property
+    def add_fieldsets(self):
+        return append_primary_fields(super().add_fieldsets, self.new_fields)
