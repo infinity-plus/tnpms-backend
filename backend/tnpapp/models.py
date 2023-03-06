@@ -38,10 +38,30 @@ class ApprovableMetaMixin:
         super().__init__(*args, **kwargs)
         if not hasattr(self, 'read_only_fields'):
             self.read_only_fields = ()
-        self.read_only_fields = (*self.read_only_fields,"is_approved",)
+        self.read_only_fields += ("is_approved"),
+
+class ApprovableModelFilterMixin:
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        if not hasattr(self, 'list_filter'):
+            self.list_filter = ()
+        self.list_filter += ("is_approved",)
+
+class ApprovableAdminMixin(ApprovableModelFilterMixin):
+    """
+    ADD MIXIN BEFORE EXTENDING WITH THE BASE CLASS
+    Usage:
+    class A(Mixin, B, C):
+        pass
+    """
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        # assuming self.fieldsets and self.add_fieldsets are already set
+        self.fieldsets[0][1]["fields"] += ("is_approved",) #type: ignore
+        self.add_fieldsets[0][1]["fields"] += ("is_approved",) #type: ignore
 
 
-class CustomUser(AbstractUser, Approvable):
+class CustomUser(AbstractUser):
     _predefined_permissions: List[str] = []
 
     phone_number = models.CharField(

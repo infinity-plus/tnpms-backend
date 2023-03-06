@@ -1,4 +1,3 @@
-from functools import cached_property
 from django.contrib import admin
 from company import models as m
 from django.contrib.admin import ModelAdmin
@@ -16,10 +15,6 @@ class CompanyAdmin(ModelAdmin):
         "company_type",
     )
 
-    @cached_property
-    def list_filter(self):
-        return (*super().list_filter, "is_approved")
-
 
 @admin.register(m.CurrentOpening)
 class CurrentOpeningsAdmin(ModelAdmin):
@@ -31,7 +26,3 @@ class CurrentOpeningsAdmin(ModelAdmin):
         "min_package",
         "gender_preference",
     )
-
-    @cached_property
-    def list_filter(self):
-        return (*super().list_filter, "is_approved")
