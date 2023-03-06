@@ -1,6 +1,5 @@
-from typing import Any, Tuple
+from typing import Any 
 from django.db import models
-from rest_framework import serializers
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import get_object_or_404
 from tnpapp.permissions import FineGrainedPermisions
@@ -26,9 +25,20 @@ class Approvable(models.Model):
     class Meta:
         abstract = True
 
-class ApprovableModelSerializer(serializers.ModelSerializer):
-    class Meta:
-        read_only_fields = ("is_approved",)
+class ApprovableMetaMixin:
+    """
+    Usage:
+    from rest_framework import serializers
+
+    class A(serializers.ModelSerializer):
+        class Meta(ApprovableMetaMixin):
+            # attributes
+    """
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        if not hasattr(self, 'read_only_fields'):
+            self.read_only_fields = ()
+        self.read_only_fields = (*self.read_only_fields,"is_approved",)
 
 
 class CustomUser(AbstractUser, Approvable):
