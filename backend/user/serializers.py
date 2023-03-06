@@ -21,8 +21,3 @@ class VolunteerSerializer(BaseUserModelSerializer):
 class UserLoginSerializer(serializers.Serializer):
     username = serializers.CharField(allow_blank=False)
     password = serializers.CharField(allow_blank=False)
-
-
-class UserChangePasswordSerialzer(serializers.Serializer):
-    password1 = serializers.CharField(allow_blank=False)
-    password2 = serializers.CharField(allow_blank=False)

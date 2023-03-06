@@ -52,24 +52,6 @@ def logout_user(req: Request):
     return Response(status=200)
 
 
-@swagger_auto_schema(methods=["post"], request_body=s.UserChangePasswordSerialzer)
-@api_view(["POST"])
-@permission_classes([p.IsAuthenticated])
-def change_password(req: Request):
-    serializer = s.UserChangePasswordSerialzer(data=req.data)
-
-    if not serializer.is_valid():
-        return Response(serializer.errors, status=400)
-
-    if serializer.validated_data["password1"] != serializer.validated_data["password2"]:
-        return Response("password do not match", status=400)
-
-    req.user.set_password(serializer.validated_data["password1"])
-    req.user.save()
-
-    return Response(status=200)
-
-
 @api_view(["GET"])
 @permission_classes([p.IsAuthenticated])
 def get_user(req: Request):
