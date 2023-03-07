@@ -22,6 +22,7 @@ edit the "sample.env" file according to your needs, and rename is to ".env"
 
 ### 4. Making Migrations
 ```
+python manage.py makemigrations
 python manage.py migrate
 ```
 
