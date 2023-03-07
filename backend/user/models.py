@@ -36,7 +36,9 @@ class Student(CustomUser):
     department = models.CharField(max_length=256)
     semester = models.CharField(max_length=1, blank=False)
     batch_year = models.DateField()  # 4 character field possible
-
+    is_profile_complete = models.BooleanField(default=False)
+    is_blocked = models.BooleanField(default=False)
+    is_selected = models.BooleanField(default=False)
     _predefined_permissions = ["view_student"]
 
     class Meta:

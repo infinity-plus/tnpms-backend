@@ -27,6 +27,9 @@ class StudentAdmin(UserAdmin_):
         "department",
         "semester",
         "batch_year",
+        "is_blocked",
+        "is_selected",
+        "is_profile_complete",
     )
 
     @cached_property
