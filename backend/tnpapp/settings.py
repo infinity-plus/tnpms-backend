@@ -60,6 +60,10 @@ CORS_ORIGIN_ALLOW_ALL = False
 ENV_CORS_WHITELIST = os.environ.get("CORS_ORIGIN_WHITELIST")
 CORS_ORIGIN_WHITELIST = [] if ENV_CORS_WHITELIST is None else ENV_CORS_WHITELIST.split(' ')
 
+CSRF_TRUSTED_ORIGINS = []
+if os.environ.get('CSRF_TRUSTED_ORIGINS') is not None:
+    CSRF_TRUSTED_ORIGINS += os.environ['CSRF_TRUSTED_ORIGINS'].split(' ')
+
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
