@@ -170,3 +170,8 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = os.environ["EMAIL_HOST_USER"]
 EMAIL_HOST_PASSWORD = os.environ["EMAIL_HOST_PASSWORD"]
+
+# Override some variables if debug is True
+# easier for development purposes
+if DEBUG:
+    CORS_ORIGIN_ALLOW_ALL = True 
