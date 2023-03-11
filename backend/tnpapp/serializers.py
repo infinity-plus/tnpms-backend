@@ -28,6 +28,7 @@ class BaseUserModelSerializer(serializers.ModelSerializer):
             "is_superuser",
             "last_login",
             "date_joined",
+            "role",
         )
 
     def validate(self, attrs: Any) -> Any:

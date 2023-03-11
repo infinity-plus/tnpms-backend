@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, UserManager
 from user.roles import VolunteerType
-from tnpapp.models import CustomUser
+from tnpapp.models import CustomUser, UserRoles
 
 
 # ALL USER MODELS
@@ -26,7 +26,10 @@ class Admin(CustomUser):
         if not self.pk:
             self.is_staff = True
             self.is_superuser = True
+            # is_approved will be used if Custom User is extending
+            # Approvable Mixin, else its just phantom data
             self.is_approved = True
+        self.role = UserRoles.Admin
         return super().save(*args, **kwargs)
 
 
@@ -40,6 +43,10 @@ class Student(CustomUser):
     is_blocked = models.BooleanField(default=False)
     is_selected = models.BooleanField(default=False)
     _predefined_permissions = ["view_student"]
+
+    def save(self, *args, **kwargs) -> None:
+        self.role = UserRoles.Student
+        return super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = "Student"
@@ -55,6 +62,10 @@ class Volunteer(CustomUser):
 
     _predefined_permissions = ["view_volunteer"]
 
+    def save(self, *args, **kwargs) -> None:
+        self.role = UserRoles.Volunteer
+        return super().save(*args, **kwargs)
+
     class Meta:
         verbose_name = "Volunteer"
         verbose_name_plural = "Volunteers"
@@ -65,6 +76,10 @@ class DeptOfficer(CustomUser):
     address = models.TextField(max_length=2000)
 
     _predefined_permissions = ["view_deptofficer"]
+
+    def save(self, *args, **kwargs) -> None:
+        self.role = UserRoles.DepartmentOfficer
+        return super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = "Department Officer"

@@ -1,4 +1,4 @@
-from typing import Any 
+from typing import Any
 from django.db import models
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import get_object_or_404
@@ -7,9 +7,28 @@ from typing import List
 from user.validators import number_validator
 from django.contrib.auth.models import Permission
 from functools import partial
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, UserManager
 
 # Create your models here.
+
+
+class UserRoles(models.IntegerChoices):
+    Admin = 0, "Admin"
+    DepartmentOfficer = 1, "Department Officer"
+    Volunteer = 2, "Volunteer"
+    Student = 3, "Student"
+
+
+class CustomUserManager(UserManager):
+    def create_superuser(self, *args, **kwargs):
+        """
+        This method is used when creating a superuser, eg from command line
+        when initializing the FIRST admin superuser in system.
+        Apply the role to avoid null role exception (mandatory field in schema)
+        """
+        kwargs["role"] = UserRoles.Admin
+        return super().create_superuser(*args, **kwargs)
+
 
 class CustomUser(AbstractUser):
     _predefined_permissions: List[str] = []
@@ -17,10 +36,14 @@ class CustomUser(AbstractUser):
     phone_number = models.CharField(
         max_length=10, validators=[partial(number_validator, length=10)]
     )
+    role = models.PositiveSmallIntegerField(choices=UserRoles.choices)
+
+    objects = CustomUserManager()
 
     def save(self, *args, **kwargs) -> None:
         saved_user = super().save(*args, **kwargs)
         # assigning permissions AFTER the user is added in the database
+        # TODO: move to groups
         self.user_permissions.add(
             *[Permission.objects.get(codename=i) for i in self._predefined_permissions]
         )
