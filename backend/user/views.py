@@ -17,6 +17,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 
+
 class StudentCrudView(BaseCrudModelViewSet):
     serializer_class = s.StudentSerializer
     model_class = m.Student
@@ -53,6 +54,7 @@ def logout_user(req: Request):
     return Response(status=200)
 
 
+@swagger_auto_schema(methods=["get"], responses={200: CustomUserSerializer})
 @api_view(["GET"])
 @permission_classes([p.IsAuthenticated])
 def get_user(req: Request):
@@ -62,6 +64,11 @@ def get_user(req: Request):
 
 @api_view(["GET"])
 def generate_resume(req: Request, username: str):
+    """
+    TODO : move to a new table, with all the details of student to generate resume and generate
+    ONCE and store it somewhere (static files), RE-GENERATE when any of the fields are changed,
+    all we do is serve static resume pdfs.
+    """
     user = m.Student.objects.filter(username=username).first()
     if user is None:
         return Response("User not Found", status=404)
