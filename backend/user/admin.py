@@ -28,13 +28,22 @@ class StudentAdmin(UserAdmin_):
         "semester",
         "batch_year",
         "is_blocked",
+    )
+
+    readonly_fields = (
         "is_selected",
         "is_profile_complete",
     )
 
     @cached_property
+    def list_filter(self):
+        return (*super().list_filter, "is_selected", "is_profile_complete")
+
+    @cached_property
     def fieldsets(self):
-        return append_primary_fields(super().fieldsets, self.new_fields)
+        return append_primary_fields(
+            super().fieldsets, self.new_fields + self.readonly_fields
+        )
 
     @cached_property
     def add_fieldsets(self):

@@ -74,10 +74,7 @@ class StudentOpening(models.Model):
     def save(self, *args, **kwargs):
         self.full_clean()
         super().save(*args, **kwargs)
-        if any(StudentOpening.objects.filter(selected=True)):
-            self.student.is_selected = True
-        else:
-            self.student.is_selected = False
+        self.student.is_selected = bool(StudentOpening.objects.filter(selected=True))
         self.student.save()
 
     class Meta:
