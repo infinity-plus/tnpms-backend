@@ -61,7 +61,9 @@ class BaseCrudModelViewSet(ModelViewSet):
     # https://www.django-rest-framework.org/api-guide/filtering/#djangofilterbackend
 
     def get_object(self):
-        return get_object_or_404(self.model_class, id=self.kwargs["pk"])
+        obj = get_object_or_404(self.model_class, id=self.kwargs["pk"])
+        self.check_object_permissions(self.request, obj)
+        return obj
 
     def get_queryset(self):
         """
