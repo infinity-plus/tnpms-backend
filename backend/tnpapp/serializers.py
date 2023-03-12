@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from typing import Any
 from tnpapp.models import CustomUser
+from django.contrib.auth.hashers import make_password
 
 
 class BaseUserModelSerializer(serializers.ModelSerializer):
@@ -32,13 +33,10 @@ class BaseUserModelSerializer(serializers.ModelSerializer):
         )
 
     def validate(self, attrs: Any) -> Any:
-        attrs["password"] = attrs["password1"]
+        attrs["password"] = make_password(attrs["password1"])
         if attrs.pop("password1") != attrs.pop("password2"):
             raise serializers.ValidationError({"password": "passwords do not match"})
         return attrs
-
-    def save(self):
-        return self.Meta.model.objects.create_user(**self.validated_data)
 
 
 class CustomUserSerializer(BaseUserModelSerializer):
