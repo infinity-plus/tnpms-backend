@@ -5,12 +5,14 @@ from django.contrib.auth import login, logout
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.request import Request
 from rest_framework.response import Response
+from tnpapp.permissions import FineGrainedPermisions
 from tnpapp.serializers import CustomUserSerializer
 from user import serializers as s
 from user import models as m
 from django.template import Context, Template
 from xhtml2pdf import pisa  # type: ignore
 from django.http import HttpResponse
+from user.permissions import IsOwnerOrReadOnly
 from user.utils import link_callback
 from tnpapp.models import BaseCrudModelViewSet
 from django.views.decorators.csrf import csrf_exempt
@@ -21,6 +23,8 @@ from django.views.decorators.csrf import csrf_exempt
 class StudentCrudView(BaseCrudModelViewSet):
     serializer_class = s.StudentSerializer
     model_class = m.Student
+    # check for correct usage, bitwise operation or list elements 
+    permission_classes = [IsOwnerOrReadOnly | FineGrainedPermisions]
 
 
 class VolunteerCrudView(BaseCrudModelViewSet):
