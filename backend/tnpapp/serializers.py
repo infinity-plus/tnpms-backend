@@ -33,6 +33,14 @@ class BaseUserModelSerializer(serializers.ModelSerializer):
         )
 
     def validate(self, attrs: Any) -> Any:
+        # TODO : simplify the checks
+        if self.partial:
+            if attrs.get("password1") is None and attrs.get("password2") is None:
+                return attrs
+        if attrs.get("password1") is None:
+            raise serializers.ValidationError({"password1": "password1 is None"})
+        if attrs.get("password2") is None:
+            raise serializers.ValidationError({"password2": "password2 is None"})
         attrs["password"] = make_password(attrs["password1"])
         if attrs.pop("password1") != attrs.pop("password2"):
             raise serializers.ValidationError({"password": "passwords do not match"})
