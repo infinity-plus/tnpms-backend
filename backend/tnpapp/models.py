@@ -2,7 +2,7 @@ from typing import Any
 from django.db import models
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import get_object_or_404
-from tnpapp.permissions import FineGrainedPermisions
+from tnpapp.permissions import FineGrainedPermissions
 from typing import List
 from user.validators import number_validator
 from django.contrib.auth.models import Permission
@@ -55,7 +55,7 @@ class BaseCrudModelViewSet(ModelViewSet):
     # detialed serializer for one entity view
     serializer_class: Any
     model_class: Any
-    permission_classes = [FineGrainedPermisions]
+    permission_classes = [FineGrainedPermissions]
     http_method_names = [
         "get",
         "post",

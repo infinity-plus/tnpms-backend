@@ -5,7 +5,7 @@ from django.contrib.auth import login, logout
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.request import Request
 from rest_framework.response import Response
-from tnpapp.permissions import FineGrainedPermisions
+from tnpapp.permissions import FineGrainedPermissions
 from tnpapp.serializers import CustomUserSerializer
 from user import serializers as s
 from user import models as m
@@ -24,7 +24,7 @@ class StudentCrudView(BaseCrudModelViewSet):
     serializer_class = s.StudentSerializer
     model_class = m.Student
     # check for correct usage, bitwise operation or list elements 
-    permission_classes = [IsOwnerOrReadOnly | FineGrainedPermisions]
+    permission_classes = [IsOwnerOrReadOnly | FineGrainedPermissions]
 
 
 class VolunteerCrudView(BaseCrudModelViewSet):

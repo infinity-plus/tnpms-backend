@@ -1,7 +1,7 @@
 from rest_framework.permissions import DjangoModelPermissions
 
 
-class FineGrainedPermisions(DjangoModelPermissions):
+class FineGrainedPermissions(DjangoModelPermissions):
     # ovveride 'GET', and add "view" perimission to deny viewing
     # eg "GET": ["%(app_label)s.view_%(model_name)s"],
     # original = "GET" : []
