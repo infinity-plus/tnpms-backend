@@ -1,6 +1,7 @@
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.contrib.auth.models import AbstractUser, UserManager
-from user.roles import VolunteerType
+from user.roles import Department, VolunteerType
 from tnpapp.models import CustomUser, UserRoles
 
 
@@ -36,8 +37,11 @@ class Admin(CustomUser):
 class Student(CustomUser):
     marks = models.IntegerField()
     institute = models.CharField(max_length=256)
-    department = models.CharField(max_length=256)
-    semester = models.CharField(max_length=1, blank=False)
+    # department = models.CharField(max_length=256)
+    department = models.PositiveSmallIntegerField(choices=Department.choices)
+    semester = models.PositiveSmallIntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(8)]
+    )
     batch_year = models.DateField()  # 4 character field possible
     is_profile_complete = models.BooleanField(default=False)
     is_blocked = models.BooleanField(default=False)
