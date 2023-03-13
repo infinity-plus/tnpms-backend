@@ -56,7 +56,16 @@ class BaseCrudModelViewSet(ModelViewSet):
     serializer_class: Any
     model_class: Any
     permission_classes = [FineGrainedPermisions]
-
+    http_method_names = [
+        "get",
+        "post",
+        # "put",
+        "patch",
+        "delete",
+        "head",
+        "options",
+        "trace",
+    ]
     # for filtering
     # https://www.django-rest-framework.org/api-guide/filtering/#djangofilterbackend
 
