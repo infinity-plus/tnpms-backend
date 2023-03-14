@@ -60,7 +60,7 @@ class StudentAdmin(UserAdmin_):
 class VolunteerAdmin(UserAdmin_):
     new_fields = (
         "phone_number",
-        "job_numbers",
+        # "job_numbers",
         "department",
         "semester",
         "volunteer_type",

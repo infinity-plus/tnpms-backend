@@ -70,10 +70,18 @@ class Student(CustomUser):
 
 
 class Volunteer(CustomUser):
-    job_numbers = models.PositiveSmallIntegerField()
-    department = models.CharField(max_length=256)
-    semester = models.CharField(max_length=1, blank=False)
-    volunteer_type = models.PositiveSmallIntegerField(choices=VolunteerType.choices)
+    # why was this needed in the first place?
+    # job_numbers = models.PositiveSmallIntegerField()
+    enrollment_number = models.CharField(
+        max_length=12, validators=[partial(number_validator, length=12)]
+    )
+    department = models.PositiveSmallIntegerField(choices=Department.choices)
+    semester = models.PositiveSmallIntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(8)]
+    )
+    volunteer_type = models.PositiveSmallIntegerField(
+        choices=VolunteerType.choices, default=VolunteerType.WORKER
+    )
     reference = models.TextField(max_length=2000, null=True)
 
     _predefined_permissions = ["view_volunteer"]
