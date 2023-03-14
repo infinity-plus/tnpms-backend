@@ -22,6 +22,7 @@ class AdminUserAdmin(UserAdmin_):
 class StudentAdmin(UserAdmin_):
     new_fields = (
         "phone_number",
+        "enrollment_number",
         "marks",
         "institute",
         "department",
@@ -37,7 +38,12 @@ class StudentAdmin(UserAdmin_):
 
     @cached_property
     def list_filter(self):
-        return (*super().list_filter, "is_selected", "is_profile_complete")
+        return (
+            *super().list_filter,
+            "is_selected",
+            "is_profile_complete",
+            "is_blocked",
+        )
 
     @cached_property
     def fieldsets(self):

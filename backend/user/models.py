@@ -3,6 +3,9 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, UserManager
 from user.roles import Department, VolunteerType
 from tnpapp.models import CustomUser, UserRoles
+import datetime
+from user.validators import number_validator
+from functools import partial
 
 
 # ALL USER MODELS
@@ -35,14 +38,23 @@ class Admin(CustomUser):
 
 
 class Student(CustomUser):
-    marks = models.IntegerField()
-    institute = models.CharField(max_length=256)
-    # department = models.CharField(max_length=256)
+    enrollment_number = models.CharField(
+        max_length=12, validators=[partial(number_validator, length=12)]
+    )
+    marks = models.IntegerField(blank=True, null=True)
+    institute = models.CharField(
+        max_length=3, validators=[partial(number_validator, length=3)]
+    )
     department = models.PositiveSmallIntegerField(choices=Department.choices)
     semester = models.PositiveSmallIntegerField(
-        validators=[MinValueValidator(0), MaxValueValidator(8)]
+        validators=[MinValueValidator(1), MaxValueValidator(8)]
     )
-    batch_year = models.DateField()  # 4 character field possible
+    batch_year = models.PositiveIntegerField(
+        validators=[
+            MinValueValidator(2012),
+            MaxValueValidator(datetime.datetime.now().year),
+        ]
+    )
     is_profile_complete = models.BooleanField(default=False)
     is_blocked = models.BooleanField(default=False)
     is_selected = models.BooleanField(default=False)
