@@ -34,7 +34,10 @@ class CustomUser(AbstractUser):
     _predefined_permissions: List[str] = []
 
     phone_number = models.CharField(
-        max_length=10, validators=[partial(number_validator, length=10)]
+        max_length=10,
+        validators=[partial(number_validator, length=10)],
+        blank=True,
+        null=True,
     )
     role = models.PositiveSmallIntegerField(choices=UserRoles.choices)
 
