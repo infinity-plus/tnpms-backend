@@ -12,7 +12,7 @@ from user import models as m
 from django.template import Context, Template
 from xhtml2pdf import pisa  # type: ignore
 from django.http import HttpResponse
-from user.permissions import IsOwnerOrReadOnly
+from user.permissions import IsOwnerOrReadOnly, Registerable
 from user.utils import link_callback
 from tnpapp.models import BaseCrudModelViewSet
 from django.views.decorators.csrf import csrf_exempt
@@ -24,13 +24,14 @@ class StudentCrudView(BaseCrudModelViewSet):
     serializer_class = s.StudentSerializer
     model_class = m.Student
     # check for correct usage, bitwise operation or list elements 
-    permission_classes = [IsOwnerOrReadOnly | FineGrainedPermissions]
+    permission_classes = [IsOwnerOrReadOnly | Registerable | FineGrainedPermissions]
 
 
 class VolunteerCrudView(BaseCrudModelViewSet):
     serializer_class = s.VolunteerSerializer
     model_class = m.Volunteer
 
+    permission_classes = [IsOwnerOrReadOnly | Registerable | FineGrainedPermissions]
 
 @swagger_auto_schema(methods=["post"], request_body=s.UserLoginSerializer)
 @csrf_exempt
