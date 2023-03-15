@@ -39,7 +39,7 @@ class Admin(CustomUser):
 
 class Student(CustomUser):
     enrollment_number = models.CharField(
-        max_length=12, validators=[partial(number_validator, length=12)]
+        max_length=12, validators=[partial(number_validator, length=12)], unique=True
     )
     marks = models.IntegerField(blank=True, null=True)
     institute = models.CharField(
