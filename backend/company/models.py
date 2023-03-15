@@ -9,12 +9,12 @@ from functools import partial
 class Company(models.Model):
     name = models.CharField(max_length=256)
     email_id = models.EmailField()
-    phone_number = models.CharField(max_length=10, validators=[
-                                    partial(number_validator, length=10)])
+    phone_number = models.CharField(
+        max_length=10, validators=[partial(number_validator, length=10)]
+    )
     hr_name = models.CharField(max_length=256)
     address = models.TextField()
-    company_relation = models.PositiveSmallIntegerField(
-        choices=CompanyType.choices)
+    company_relation = models.PositiveSmallIntegerField(choices=CompanyType.choices)
     # is mandatory in document but ONLY needed if company is a child
     parent_company_name = models.CharField(max_length=256, null=True)
     # possible to move to enum probably
@@ -32,11 +32,13 @@ class Company(models.Model):
 
 
 class CurrentOpening(models.Model):
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
     job_title = models.CharField(max_length=256)
     opening_year = models.CharField(max_length=256)
     # supposed to be numeric 15? what exactly is nature, in a 15 digit number?
-    nature_of_job = models.CharField(max_length=15, validators=[
-                                     partial(number_validator, length=15)])
+    nature_of_job = models.CharField(
+        max_length=15, validators=[partial(number_validator, length=15)]
+    )
     short_description = models.CharField(max_length=256)
     long_description = models.TextField()
     min_qualification = models.PositiveIntegerField()
@@ -48,8 +50,7 @@ class CurrentOpening(models.Model):
     min_package = models.FloatField()
     max_package = models.FloatField()
     # supposed to be boolean, what about `ANY` type? nullable boolean?
-    gender_preference = models.PositiveSmallIntegerField(
-        choices=Gender.choices)
+    gender_preference = models.PositiveSmallIntegerField(choices=Gender.choices)
 
     def __str__(self) -> str:
         return self.job_title
