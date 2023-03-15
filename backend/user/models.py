@@ -37,6 +37,15 @@ class Admin(CustomUser):
         return super().save(*args, **kwargs)
 
 
+# TODO :  add d2d
+def calculate_semester(year: int) -> int:
+    today = datetime.datetime.now()
+    sem = (today.year - year) * 2
+    if today.month > 5:
+        sem += 1
+    return sem
+
+
 class Student(CustomUser):
     enrollment_number = models.CharField(
         max_length=12, validators=[partial(number_validator, length=12)], unique=True
@@ -62,6 +71,16 @@ class Student(CustomUser):
 
     def save(self, *args, **kwargs) -> None:
         self.role = UserRoles.Student
+        if not self.pk:
+            enr = self.enrollment_number
+            if not self.department:
+                self.department = int(enr[7:9])
+            if not self.batch_year:
+                self.batch_year = 2000 + int(enr[0:2])
+            if not self.institute:
+                self.institute = enr[2:5]
+            if not self.semester:
+                self.semester = calculate_semester(self.batch_year)
         return super().save(*args, **kwargs)
 
     class Meta:
@@ -88,6 +107,13 @@ class Volunteer(CustomUser):
 
     def save(self, *args, **kwargs) -> None:
         self.role = UserRoles.Volunteer
+        if not self.pk:
+            enr = self.enrollment_number
+            if not self.department:
+                self.department = int(enr[7:9])
+            if not self.semester:
+                self.semester = calculate_semester(2000 + int(enr[0:2]))
+
         return super().save(*args, **kwargs)
 
     class Meta:

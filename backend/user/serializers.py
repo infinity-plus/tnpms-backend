@@ -1,27 +1,9 @@
-import datetime
 from rest_framework import serializers
 from user import models as m
 from tnpapp.serializers import BaseUserModelSerializer
-from typing import Any
-
-
-def calculate_semester(year: int) -> int:
-    today = datetime.datetime.now()
-    sem = (today.year - year) * 2
-    if today.month > 5:
-        sem += 1
-    return sem
 
 
 class StudentSerializer(BaseUserModelSerializer):
-    def create(self, validated_data: Any):
-        enr = validated_data["enrollment_number"]
-        validated_data["batch_year"] = 2000 + int(enr[0:2])
-        validated_data["institute"] = enr[2:5]
-        validated_data["department"] = int(enr[7:9])
-        validated_data["semester"] = calculate_semester(validated_data["batch_year"])
-        return super().create(validated_data)
-
     # https://github.com/encode/django-rest-framework/issues/1926
     class Meta(BaseUserModelSerializer.Meta):
         model = m.Student
@@ -44,13 +26,6 @@ class DeptOfficerSerializer(BaseUserModelSerializer):
 
 
 class VolunteerSerializer(BaseUserModelSerializer):
-    def create(self, validated_data: Any):
-        enr = validated_data["enrollment_number"]
-        batch_year = 2000 + int(enr[0:2])
-        validated_data["department"] = int(enr[7:9])
-        validated_data["semester"] = calculate_semester(batch_year)
-        return super().create(validated_data)
-
     class Meta(BaseUserModelSerializer.Meta):
         model = m.Volunteer
         extra_kwargs = {
