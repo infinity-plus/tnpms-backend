@@ -45,8 +45,8 @@ class CurrentOpening(models.Model):
     vacancy_count = models.PositiveIntegerField()
     # why number? possibly text about address
     vacancy_location = models.PositiveIntegerField()
-    min_package = models.PositiveBigIntegerField()
-    max_package = models.PositiveBigIntegerField()
+    min_package = models.FloatField()
+    max_package = models.FloatField()
     # supposed to be boolean, what about `ANY` type? nullable boolean?
     gender_preference = models.PositiveSmallIntegerField(
         choices=Gender.choices)
