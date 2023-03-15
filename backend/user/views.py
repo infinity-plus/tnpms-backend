@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+from django.views import View
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import permissions as p
 from django.contrib.auth import login, logout
@@ -16,6 +17,7 @@ from user.permissions import IsOwnerOrReadOnly, Registerable
 from user.utils import link_callback
 from tnpapp.models import BaseCrudModelViewSet
 from django.views.decorators.csrf import csrf_exempt
+from user.forms import StudentRegistrationForm
 
 # Create your views here.
 
@@ -23,7 +25,7 @@ from django.views.decorators.csrf import csrf_exempt
 class StudentCrudView(BaseCrudModelViewSet):
     serializer_class = s.StudentSerializer
     model_class = m.Student
-    # check for correct usage, bitwise operation or list elements 
+    # check for correct usage, bitwise operation or list elements
     permission_classes = [IsOwnerOrReadOnly | Registerable | FineGrainedPermissions]
 
 
@@ -33,6 +35,21 @@ class VolunteerCrudView(BaseCrudModelViewSet):
 
     permission_classes = [IsOwnerOrReadOnly | Registerable | FineGrainedPermissions]
 
+
+class StudentRegistrationView(View):
+    def get(self, request):
+        form = StudentRegistrationForm()
+        return render(request, "studentregistration.html", {"form": form})
+
+    def post(self, request):
+        post_form = StudentRegistrationForm(request.POST)
+        if post_form.is_valid():
+            post_form.save(commit=True)
+            # TODO : change this redirect
+            return redirect("/admin")
+        return render(request, "studentregistration.html", {"form": post_form})
+
+
 @swagger_auto_schema(methods=["post"], request_body=s.UserLoginSerializer)
 @csrf_exempt
 @api_view(["POST"])
@@ -41,7 +58,9 @@ def login_user(req: Request):
     if not srlzr.is_valid():
         return Response(srlzr.errors, status=400)
 
-    user = m.CustomUser.objects.filter(username=srlzr.validated_data["username"]).first()
+    user = m.CustomUser.objects.filter(
+        username=srlzr.validated_data["username"]
+    ).first()
     if user is None:
         return Response("User Not Found in System", status=404)
 
