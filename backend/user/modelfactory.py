@@ -1,21 +1,19 @@
 from tnpapp.modelfactory import CustomUserFactory
 from user.models import Student
-from user import roles as r
 import factory
 import factory.fuzzy
-import datetime
+from user.serializers import calculate_semester
 
 
 class StudentFactory(CustomUserFactory):
     class Meta:
         model = Student
-
+    
+    enrollment_number = factory.Sequence(lambda n: '200160107%03d' % n)
     marks = factory.fuzzy.FuzzyInteger(10, 100)
-    institute = "GECM"
-    department = factory.Iterator(r.Department.choices, getter=lambda c: c[0])
-    semester = factory.fuzzy.FuzzyInteger(1, 8)
-    batch_year = factory.fuzzy.FuzzyDateTime(
-        datetime.datetime(2008, 1, 1, tzinfo=datetime.timezone.utc)
-    )  # 4 character field possible
+    batch_year = factory.LazyAttribute(lambda o: 2000 + int(o.enrollment_number[0:2]))
+    institute = factory.LazyAttribute(lambda o: o.enrollment_number[2:5])
+    department = factory.LazyAttribute(lambda o :int(o.enrollment_number[7:9]))
+    semester = factory.LazyAttribute(lambda o:calculate_semester(o.batch_year))
     is_profile_complete = False
     is_blocked = factory.Faker("boolean", chance_of_getting_true=30)
