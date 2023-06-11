@@ -76,7 +76,7 @@ class Student(CustomUser):
             if not self.department:
                 self.department = int(enr[7:9])
             if not self.batch_year:
-                self.batch_year = 2000 + int(enr[0:2])
+                self.batch_year = 2000 + int(enr[:2])
             if not self.institute:
                 self.institute = enr[2:5]
             if not self.semester:
@@ -112,7 +112,7 @@ class Volunteer(CustomUser):
             if not self.department:
                 self.department = int(enr[7:9])
             if not self.semester:
-                self.semester = calculate_semester(2000 + int(enr[0:2]))
+                self.semester = calculate_semester(2000 + int(enr[:2]))
 
         return super().save(*args, **kwargs)
 

@@ -14,7 +14,7 @@ def link_callback(uri, rel):
 
     if not isinstance(result, (list, tuple)):
         result = [result]
-        result = list(os.path.realpath(path) for path in result)
+        result = [os.path.realpath(path) for path in result]
         path = result[0]
     else:
         sUrl = settings.STATIC_URL    # Typically /static/
@@ -31,7 +31,5 @@ def link_callback(uri, rel):
 
         # make sure that file exists
     if not os.path.isfile(path):
-        raise Exception(
-            'media URI must start with %s or %s' % (sUrl, mUrl)
-        )
+        raise Exception(f'media URI must start with {sUrl} or {mUrl}')
     return path
