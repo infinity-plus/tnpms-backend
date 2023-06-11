@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+
 from pathlib import Path
 import os
 from dotenv import load_dotenv
@@ -56,7 +57,6 @@ INSTALLED_APPS = [
     'placement'
 ]
 
-CORS_ORIGIN_ALLOW_ALL = False
 ENV_CORS_WHITELIST = os.environ.get("CORS_ORIGIN_WHITELIST")
 CORS_ORIGIN_WHITELIST = [] if ENV_CORS_WHITELIST is None else ENV_CORS_WHITELIST.split(' ')
 
@@ -171,7 +171,4 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = os.environ["EMAIL_HOST_USER"]
 EMAIL_HOST_PASSWORD = os.environ["EMAIL_HOST_PASSWORD"]
 
-# Override some variables if debug is True
-# easier for development purposes
-if DEBUG:
-    CORS_ORIGIN_ALLOW_ALL = True 
+CORS_ORIGIN_ALLOW_ALL = DEBUG 

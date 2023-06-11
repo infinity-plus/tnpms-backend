@@ -18,7 +18,4 @@ class Registerable(permissions.BasePermission):
     def has_permission(self, request: Request, view: APIView) -> bool:
         if request.method in permissions.SAFE_METHODS:
             return True
-        if request.method == "POST":
-            return True
-
-        return False
+        return request.method == "POST"
